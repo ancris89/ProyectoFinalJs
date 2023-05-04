@@ -2,15 +2,8 @@ var presupuesto= 0;
 var porcentajeEgreso = 0;
 
 
-const ingresos = [
-    new Ingreso("Salario", 2100.00),
-    new Ingreso("Venta coche ", 1500)
-];
-
-const egresos = [
-    new Egreso("Renta departamento", 900),
-    new Egreso("Ropa", 400)
-];
+let egresos = [new Egreso ('Renta',40000),new Egreso ('Ropa',9200)];
+let ingresos = [new Ingreso ('Salario',20000),new Ingreso('Venta auto',50000), new Ingreso('Rentas',80000)];
 
 
 const cargarCabecero = () =>  {
@@ -43,7 +36,6 @@ let totalEgresos = () => {
 };
 
 const formatoMoneda = (numero) => {
-    console.log(numero);
     numero = numero.toLocaleString('es-MX', {style: 'currency',currency: 'MXN', minimumFractionDigits: 2});
     return numero;
 }
@@ -53,66 +45,66 @@ const formatoPorcentaje = (porcentaje) => {
     return porcentaje;
 };
 
+
 const cargarAPP=() =>{
     cargarCabecero();
 }
 
 //cargarIngresos
 const cargarIngresos = ()=>{
-    let ingresosHTML ="";
+    let ingresosHTML ='';
     for (let ingreso of ingresos) {
-        ingresosHTML += crearIngresosHTML(ingreso);
+        console.log(ingreso._descripcion, ingreso._valor);
     }
     document.getElementById("lista-ingresos").innerHTML = ingresosHTML;
 }
 
 //cargarEgresos
 const  cargarEgresos = ()=>{
-    let egresosHTML ="";
+    let egresosHTML ='';
     for (let egreso of egresos) {
-        egresosHTML += crearEgresosHTML(egreso);
+        console.log(egreso._descripcion, egreso._valor);
     }
     document.getElementById("lista-egresos").innerHTML = egresosHTML;
 }
 
 //crearIngresosHtml
 const crearIngresosHTML =(ingreso)=>{
-    let ingresoHTML = `
-    <div class="elemento limpiarEstilos">
-        <div class="elemento_descripcion">${ingreso.descripcion}</div>
-            <div class="derecha limpiarEstilos">
-                <div class="elemento_valor">${formatoMoneda(ingreso.valor)}</div>
-                <div class="elemento_eliminar">
-                    <button class="elemento_eliminar--btn">
-                        <ion-icon name="close-circle-outline" 
-                        onclick="eliminarIngreso(${ingreso.id})"  ></ion-icon>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-    return ingresoHTML;
+    let ingresosHTML = 
+                `<div class="limpiarEstilos; elemento">
+                <div class=elemento_descripcion">${ingreso._descripcion}
+                        <div class="limpiarEstilos; derecha"> 
+                                <div class="elemento_valor">${formatoMoneda(ingreso._valor)}</div>
+                                <div class="elemento_eliminar">
+                                        <button class="elemento_eliminar--btn">
+                                        <ion-icon name="close-circle-outline" onclick="eliminarIngreso(${ingreso._id})"></ion-icon>
+                                        </button>
+                                </div>
+                                </div>
+                        </div>
+                </div>`;
+     
+        return ingresosHTML;
 }
 
 //crearEgresosHtml
 const crearEgresosHTML =(egreso)=>{
-    let egresoHTML = `
-    <div class="elemento limpiarEstilos">
-        <div class="elemento_descripcion">${egreso.descripcion} </div>
-        <div class="derecha limpiarEstilos">
-            <div class="elemento_valor"> ${formatoMoneda(egreso.valor)}</div>
-            <div class="elemento_porcentaje">${formatoPorcentaje(egreso.valor/totalEgresos()) }</div>
-            <div class="elemento_eliminar">
-                <button class="elemento_eliminar--btn">
-                    <ion-icon name="close-circle-outline"
-                    onclick="eliminarEgreso(${egreso.id})"   ></ion-icon>
-                </button>
-            </div>
-        </div>
-    </div>
-    `;
-    return egresoHTML;
+    let egresosHTML = 
+                `<div class="limpiarEstilos; elemento">
+                <div class=elemento_descripcion">${egreso._descripcion}
+                    <div class="limpiarEstilos; derecha"> 
+                        <div class="elemento_valor">${formatoMoneda(egreso._valor)}</div>
+                        <div class="elemento_porcentaje">${formatoPorcentaje(egreso._valor/totalEgresos())}</div>
+                        <div class="elemento_eliminar">
+                            <button class="elemento_eliminar--btn">
+                            <ion-icon name="close-circle-outline" onclick="eliminarEgreso(${egreso._id})"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        return egresosHTML;
 
 }
 
@@ -135,24 +127,23 @@ const eliminarEgreso = (id)=>{
 
 //agregarDato
 let agregarDato = ()=>{
-    let forma = document.forms["forma"];
-    let tipo = forma["tipo"];
-    let descripcion= forma["descripcion"];
-    let valor = forma["valor"];
+        let forma = document.getElementById('#forma');
+        let tipo = document.querySelector('#tipo');
+        let descripcion = document.getElementById('#descripcion');
+        let valor = document.getElementById('#valor');
 
-    if (descripcion.value !== "" && valor.value !=="") {
-        if (tipo.value==="ingreso") {
-            
-            ingresos.push(new Ingreso(descripcion.value, +valor.value));
-            cargarCabecero();
-            cargarIngresos();
-        } else if(tipo.value ==="egreso"){
-            egresos.push( new Egreso(descripcion.value, Number(valor.value)));
-            cargarCabecero();   
-            cargarEgresos();
-        }
-        
-
-    } 
+    if(descripcion !== '' || valor !== 0){
+        if(tipo === 'ingreso'){
+                ingresos.push(new Ingreso (descripcion,valor));
+                
+        }else{
+                egresos.push(new Egreso (descripcion,valor));
+        }       
+};
+if(descripcion === '' || valor === 0){
+        alert('La descripcion y/o valor esta vacia.  Por favor ingrese un concepto');
+};
+cargarCabecero();
+cargarIngresos();
 
 }
