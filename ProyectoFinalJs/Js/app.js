@@ -2,8 +2,8 @@ var presupuesto= 0;
 var porcentajeEgreso = 0;
 
 
-let egresos = [new Egreso ('Renta',40000),new Egreso ('Ropa',9200)];
-let ingresos = [new Ingreso ('Salario',20000),new Ingreso('Venta auto',50000), new Ingreso('Rentas',80000)];
+let egresos = [new Egreso ('Renta',40000),new Egreso ('Ropa',9200),new Egreso ('test',  200)];
+let ingresos = [new Ingreso ('Salario',20000),new Ingreso('Venta auto',50000), new Ingreso('Rentas',80000), new Ingreso('Prueba',80000), new Ingreso('Pruebaaaa',80000)];
 
 
 const cargarCabecero = () =>  {
@@ -21,7 +21,7 @@ let totalIngresos = () => {
     let totalIngresos = 0;
 
     for (let ingreso of ingresos) {
-        totalIngresos += ingreso.valor;
+        totalIngresos += parseFloat(ingreso.valor);
     }
     return totalIngresos;  
 };
@@ -30,7 +30,7 @@ let totalEgresos = () => {
     let totalEgresos = 0;
 
     for (let egreso of egresos) {
-        totalEgresos += egreso.valor;
+        totalEgresos += parseFloat(egreso.valor);
     }  
     return totalEgresos;
 };
@@ -48,24 +48,55 @@ const formatoPorcentaje = (porcentaje) => {
 
 const cargarAPP=() =>{
     cargarCabecero();
+    cargarIngresos(ingresos)
+    cargarEgresos(egresos)
 }
 
 //cargarIngresos
-const cargarIngresos = ()=>{
+const cargarIngresos = (ingresos)=>{
+    console.log(ingresos);
     let ingresosHTML ='';
     for (let ingreso of ingresos) {
-        console.log(ingreso._descripcion, ingreso._valor);
+        ingresosHTML += `
+        <div class="elemento limpiarEstilos">
+            <div class="elemento_descripcion">
+                ${ingreso._descripcion}
+            </div>
+            <div class="derecha limpiarEstilos">
+                <div class="elemento_valor">
+                    ${formatoMoneda(ingreso._valor)}
+                </div>
+                <div class="elemento_eliminar">
+                    <button class="elemento_eliminar_btn"><ion-icon name="close-circle-outline" onclick="eliminarIngreso(${ingreso.Id})" role="img" class="md hydrated"></ion-icon></button>
+                </div>
+            </div>
+        </div>`
     }
     document.getElementById("lista-ingresos").innerHTML = ingresosHTML;
 }
 
 //cargarEgresos
-const  cargarEgresos = ()=>{
+const  cargarEgresos = (egresos)=>{
     let egresosHTML ='';
     for (let egreso of egresos) {
-        console.log(egreso._descripcion, egreso._valor);
+        egresosHTML += `
+        <div class="elemento limpiarEstilos">
+            <div class="elemento_descripcion">
+                ${egreso._descripcion}
+            </div>
+            <div class="derecha limpiarEstilos">
+                <div class="elemento_valor">
+                    ${formatoMoneda(egreso._valor)}
+                </div>
+                <div class="elemento_eliminar">
+                    <button class="elemento_eliminar_btn"><ion-icon name="close-circle-outline" onclick="eliminarEgreso(${egreso.Id})" role="img" class="md hydrated"></ion-icon></button>
+                </div>
+            </div>
+        </div>`
     }
-    document.getElementById("lista-egresos").innerHTML = egresosHTML;
+    console.log(egresosHTML);
+
+    document.getElementById("lista_egresos").innerHTML = egresosHTML;
 }
 
 //crearIngresosHtml
@@ -110,40 +141,44 @@ const crearEgresosHTML =(egreso)=>{
 
 //EliminarIngreso
 const eliminarIngreso = (id)=>{
-    let indiceEliminar =  ingresos.findIndex(ingreso => ingreso.id === id );
+    let indiceEliminar =  ingresos.findIndex(ingreso => ingreso.Id === id );
                          
     ingresos.splice(indiceEliminar, 1);
     cargarCabecero();
-    cargarIngresos();
+    cargarIngresos(ingresos);
   }
 
   //eliminarEgreso
-const eliminarEgreso = (id)=>{
-    let indiceEliminar =  egresos.findIndex(egreso => egreso.id === id );
+const eliminarEgreso = (id)=>{  
+    let indiceEliminar =  egresos.findIndex(egreso => egreso.Id === id );
     egresos.splice(indiceEliminar, 1);
     cargarCabecero();
-    cargarEgresos();
+    cargarEgresos(egresos);
 }
 
 //agregarDato
 let agregarDato = ()=>{
-        let forma = document.getElementById('#forma');
-        let tipo = document.querySelector('#tipo');
-        let descripcion = document.getElementById('#descripcion');
-        let valor = document.getElementById('#valor');
+    let forma = document.getElementById('forma');
+    let tipoSelect = forma.querySelector('#tipo');
+    let descripcionInput = forma.querySelector('#descripcion');
+    let valorInput = forma.querySelector('#valor');
 
-    if(descripcion !== '' || valor !== 0){
-        if(tipo === 'ingreso'){
-                ingresos.push(new Ingreso (descripcion,valor));
-                
-        }else{
-                egresos.push(new Egreso (descripcion,valor));
-        }       
-};
-if(descripcion === '' || valor === 0){
+    let tipo = tipoSelect.value
+    let descripcion = descripcionInput.value
+    let valor = valorInput.value
+
+    if(descripcion === '' || valor === 0){
         alert('La descripcion y/o valor esta vacia.  Por favor ingrese un concepto');
-};
-cargarCabecero();
-cargarIngresos();
-
+        return
+    };
+    if(tipo === 'ingreso'){
+        ingresos.push(new Ingreso (descripcion,valor));
+        cargarIngresos(ingresos);
+    }else{
+        egresos.push(new Egreso (descripcion,valor));
+        cargarEgresos(egresos);
+    }
+    cargarCabecero();
+    descripcionInput.value = ""
+    valorInput.value = ""
 }

@@ -59,12 +59,11 @@
             <div class="agregar_contenedor">
              <!--aqui crear un selector,3 input y un boton-->
              <select class="agregar_titulo" id="tipo">
-                <option value="ingreso" selected
-                >+</option>
+                <option value="ingreso" selected>+</option>
                 <option value="egreso">-</option>
              </select>
              <input type="text" class="agregar_descripcion" id="descripcion" placeholder="Agregar Descripcion">
-             <input type="number" class="agregar_valor"  value="valor" step="any">
+             <input type="number" class="agregar_valor" id="valor"  value="valor" step="any">
              <button class="agregar_btn" onclick="agregarDato()"> <ion-icon name="checkmark-circle-outline"></ion-icon></button>
             </div>
 
@@ -93,21 +92,6 @@
             </div>
 
         </div>
-
-        <!--crear otro div de elemento,limpiarestilos-->
-        <div class="elemento limpiarEstilos">
-            <div class="elemento_descripcion">
-                Venta Coche
-            </div>
-            <div class="derecha limpiarEstilos">
-                <div class="elemento_valor">
-                    +1,500.00
-                </div>
-                <div class="elemento_eliminar">
-                    <button class="elemento_eliminar_btn" ><ion-icon name="close-circle-outline" onclick="eliminarIngreso()"></ion-icon></button>
-                </div>
-            </div>
-        </div>
     </div> <!--fin del div Ingreso-->
     <div class="egreso">
         <h2 class="egreso_titulo">Egresos</h2>
@@ -127,25 +111,6 @@
                         <button class="elemento_elimminar_btn"> <ion-icon name="close-circle-outline" onclick="eliminarEgreso()"></ion-icon></button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!--crear otro div elemento y limpiarestilos-->
-        <div class="elemento limpiarEstilos">
-            <div class="elemento_descripcion">
-                Ropa
-            </div>
-            <div class="derecha limpiarEstilos">
-                <div class="elemento_valor">
-                    -400.00
-                </div>
-                <div class="elemento_porcentaje">
-                    9%
-                </div>
-                <div class="elemento_eliminar">
-                    <button class="elemento_eliminar_btn"><ion-icon name="close-circle-outline" onclick="eliminaregreso()"></ion-icon></button>
-                </div>
-
             </div>
         </div>
     </div>
